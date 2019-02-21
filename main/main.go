@@ -114,6 +114,9 @@ func main() {
 	fmt.Println("[6] *int ",ptr2)
 
 	// 指针的指针
+	var ptr3 **int
+	ptr3 = &ptr
+	fmt.Println("point:",ptr,ptr3,*ptr3,**ptr3)
 
 	// 条件语句
 	if f2 < 100 {
