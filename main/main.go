@@ -6,6 +6,7 @@ import (
 	"go/types"
 	"errors"
 	"time"
+	"math"
 )
 
 type NameAware interface {
@@ -19,21 +20,25 @@ func (s Student) GetName() string {
 	return s.name
 }
 
-func printName(aware NameAware) {
+func (s *Student) SetName(str string){
+	s.name = str
+}
+
+func PrintName(aware NameAware) {
 	fmt.Println("name is ", aware.GetName())
 }
 
-func swap2(a, b *int) {
+func Swap2(a, b *int) {
 	tmp := *a
 	*a = *b
 	*b = tmp
 }
 
-func swap1(a, b *int) {
+func Swap1(a, b *int) {
 	*a, *b = *b, *a
 }
 
-func printType(obj interface{}){
+func PrintType(obj interface{}){
 	switch i := obj.(type) {
 	case types.Nil:
 		fmt.Printf("obj is %T\n", i)
@@ -59,13 +64,13 @@ func Factorial(n uint64)(result uint64) {
 	return 1
 }
 
-type handler func(s string) int
+type Handler func(s string) int
 
-func (h handler) add(param1 string,param2 int) int{
+func (h Handler) Add(param1 string,param2 int) int{
 	return h(param1) + param2
 }
 
-func divide(a,b int) (int,error) {
+func Divide(a,b int) (int,error) {
 	if b == 0 {
 		return 0,errors.New("b is zero")
 	} else {
@@ -233,9 +238,11 @@ func main() {
 	student1 := Student{"li bai"}
 	student2 := Student{name:"du fu"}
 	fmt.Println("=============================")
-	printName(&student1)
-	printType(student2)
-	printType(&student2)
+	PrintName(&student1)
+	student1.SetName("li bai2")
+	PrintName(&student1)
+	PrintType(student2)
+	PrintType(&student2)
 	fmt.Println("acesss struct field:", student1.name)
 
 	var g1, g2, g3 chan int
@@ -285,9 +292,9 @@ func main() {
 	}
 
 	fmt.Println("before swap c1:", c1, "c2:", c2)
-	swap1(&c1, &c2)
+	Swap1(&c1, &c2)
 	fmt.Println("after swap c1:", c1, "c2:", c2)
-	swap2(&c1, &c2)
+	Swap2(&c1, &c2)
 	fmt.Println("after swap c1:", c1, "c2:", c2)
 	c1, c2 = c2, c1
 	fmt.Println("after swap c1:", c1, "c2:", c2)
@@ -302,10 +309,10 @@ func main() {
 	fmt.Println("for end")
 	fmt.Println(a)
 
-	var len_handler handler = func(s string) int {
+	var len_handler Handler = func(s string) int {
 		return len(s)
 	}
-	handler(len_handler).add("abc",10);
+	Handler(len_handler).Add("abc",10);
 
 	// errors.New("")
 
@@ -329,6 +336,8 @@ func main() {
 	chan2 <- 1
 	chan2 <- 2
 	fmt.Println(<-chan2,<-chan2)
+
+	fmt.Println("math:",-math.Sqrt2)
 }
 
 func sayHello(s string){
