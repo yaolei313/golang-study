@@ -1,6 +1,6 @@
 package main
 
-func adder() func(int) int {
+func Adder() func(int) int {
 	sum := 0
 	return func(x int) int {
 		sum += x
@@ -8,7 +8,7 @@ func adder() func(int) int {
 	}
 }
 
-func fibonacci() func() int {
+func Fibonacci() func() int {
 	count := 0
 	pre0 := 0
 	pre1 := 1

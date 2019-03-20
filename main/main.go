@@ -113,7 +113,9 @@ func main() {
 		e int
 	)
 	d, e = 15, 25
-	fmt.Println(a1, a2, b1, b2, c1, c2, d, e)
+	fmt.Println(a1, a2, b1, b2, d, e)
+	fmt.Printf("|%5d|%5d|\n",c1,c2)
+	fmt.Printf("|%-5d|%-5d|\n",c1,c2)
 
 	// map定义后为nil mpa，不能存放键值对，使用make可以初始化
 	var map1 map[string]string
