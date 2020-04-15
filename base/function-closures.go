@@ -1,4 +1,4 @@
-package main
+package base
 
 func Adder() func(int) int {
 	sum := 0

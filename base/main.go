@@ -1,4 +1,4 @@
-package main
+package base
 
 import (
 	"fmt"
@@ -90,7 +90,7 @@ func sdefer1() int{
 	return i
 }
 
-func main() {
+func main2() {
 	// 数据类型
 	// uint8 uint16 uint32 uint64
 	// int8 int16 int32 int64
