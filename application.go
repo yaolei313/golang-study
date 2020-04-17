@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/yaolei313/golang-study/foo"
+	"github.com/yaolei313/golang-study/internal"
 	"rsc.io/quote"
 )
 
 func main() {
-	func1 := foo.Fibonacci()
+	func1 := internal.Fibonacci()
 	fmt.Print(func1())
 	fmt.Print(func1())
 	fmt.Print(func1())
