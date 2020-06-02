@@ -15,4 +15,6 @@ func main() {
 	fmt.Print(func1())
 	fmt.Println()
 	fmt.Println(quote.Hello())
+
+	base.TestStruct()
 }
