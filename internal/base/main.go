@@ -1,12 +1,12 @@
 package base
 
 import (
-	"fmt"
-	"reflect"
-	"go/types"
 	"errors"
-	"time"
+	"fmt"
+	"go/types"
 	"math"
+	"reflect"
+	"time"
 )
 
 type NameAware interface {
@@ -20,7 +20,7 @@ func (s Student) GetName() string {
 	return s.name
 }
 
-func (s *Student) SetName(str string){
+func (s *Student) SetName(str string) {
 	s.name = str
 }
 
@@ -38,7 +38,7 @@ func Swap1(a, b *int) {
 	*a, *b = *b, *a
 }
 
-func PrintType(obj interface{}){
+func PrintType(obj interface{}) {
 	switch i := obj.(type) {
 	case types.Nil:
 		fmt.Printf("obj is %T\n", i)
@@ -57,8 +57,8 @@ func PrintType(obj interface{}){
 	}
 }
 
-func Factorial(n uint64)(result uint64) {
-	if n>0 {
+func Factorial(n uint64) (result uint64) {
+	if n > 0 {
 		return n * Factorial(n-1)
 	}
 	return 1
@@ -66,25 +66,25 @@ func Factorial(n uint64)(result uint64) {
 
 type Handler func(s string) int
 
-func (h Handler) Add(param1 string,param2 int) int{
+func (h Handler) Add(param1 string, param2 int) int {
 	return h(param1) + param2
 }
 
-func Divide(a,b int) (int,error) {
+func Divide(a, b int) (int, error) {
 	if b == 0 {
-		return 0,errors.New("b is zero")
+		return 0, errors.New("b is zero")
 	} else {
-		return a/b,nil
+		return a / b, nil
 	}
 }
 
 // defer
-func sdefer1() int{
-	i:=0
+func sdefer1() int {
+	i := 0
 	// 1.defer在return之后被调用，但其参数为实时解析
 	// 2.多个defer后定义的先被执行
 	// 类似finally吧
-	defer fmt.Println("second call",i)
+	defer fmt.Println("second call", i)
 	i++
 	defer fmt.Println("first call")
 	return i
@@ -114,8 +114,8 @@ func main2() {
 	)
 	d, e = 15, 25
 	fmt.Println(a1, a2, b1, b2, d, e)
-	fmt.Printf("|%5d|%5d|\n",c1,c2)
-	fmt.Printf("|%-5d|%-5d|\n",c1,c2)
+	fmt.Printf("|%5d|%5d|\n", c1, c2)
+	fmt.Printf("|%-5d|%-5d|\n", c1, c2)
 
 	// map定义后为nil mpa，不能存放键值对，使用make可以初始化
 	var map1 map[string]string
@@ -130,12 +130,12 @@ func main2() {
 	} else {
 		fmt.Println("not found in map")
 	}
-	map1["Japan"]="Tokyo"
-	map1["India"]="New delhi"
+	map1["Japan"] = "Tokyo"
+	map1["India"] = "New delhi"
 	fmt.Println(map1)
-	delete(map1,"France")
-	delete(map1,"abc")
-	fmt.Println("after modify map1:",map1)
+	delete(map1, "France")
+	delete(map1, "abc")
+	fmt.Println("after modify map1:", map1)
 
 	// 数组，值类型，长度固定，下标位置不支持负数
 	var array1 [2]int
@@ -162,24 +162,24 @@ func main2() {
 	// slice不存储数据，引用类型，可以看做array的section描述
 	var array7 = []int{1, 2, 3, 11, 12, 13}
 	var slice1 = array7[1:2]
-	fmt.Println(len(array7),slice1, reflect.TypeOf(slice1), cap(slice1), len(slice1))
+	fmt.Println(len(array7), slice1, reflect.TypeOf(slice1), cap(slice1), len(slice1))
 	slice1[0] = 998
-	fmt.Println("slice is a reference",array7, slice1)
+	fmt.Println("slice is a reference", array7, slice1)
 
-	var slice2 []int = make([]int,10)
-	fmt.Printf("slice2 content:%v cap=%d len=%d\n",slice2, cap(slice2), len(slice2))
+	var slice2 []int = make([]int, 10)
+	fmt.Printf("slice2 content:%v cap=%d len=%d\n", slice2, cap(slice2), len(slice2))
 	slice2 = append(slice2, 1)
-	slice2 = append(slice2, 2,3,4)
+	slice2 = append(slice2, 2, 3, 4)
 
-	var slice3 = make([]int,5,10)
+	var slice3 = make([]int, 5, 10)
 	fmt.Printf("slice3 content:%v\n", slice3)
 
 	// 类型转换
 	var float1 = float32(b1)
 	fmt.Println("after convert", float1, reflect.TypeOf(float1))
-	var float2 = 5/3
-	var float3 = float32(5)/float32(3)
-	fmt.Println("除法:",float2,float3)
+	var float2 = 5 / 3
+	var float3 = float32(5) / float32(3)
+	fmt.Println("除法:", float2, float3)
 
 	// 常量
 	const f1 string = "123"
@@ -237,8 +237,11 @@ func main2() {
 		fmt.Println("switch2 f2 > 100 and f2 != 200")
 	}
 
+	// variable_name := structure_variable_type {value1, value2...valuen}
+	// 或
+	// variable_name := structure_variable_type {key1: value1, key2: value2..., keyn: valuen}
 	student1 := Student{"li bai"}
-	student2 := Student{name:"du fu"}
+	student2 := Student{name: "du fu"}
 	fmt.Println("=============================")
 	PrintName(&student1)
 	student1.SetName("li bai2")
@@ -280,8 +283,8 @@ func main2() {
 	}*/
 
 	// for循环的range可以可以遍历slice，map，数组，字符串
-	for idx,val := range array7 {
-		fmt.Println("idx:",idx,"val:",val)
+	for idx, val := range array7 {
+		fmt.Println("idx:", idx, "val:", val)
 	}
 
 	for key, value := range map1 {
@@ -314,7 +317,7 @@ func main2() {
 	var len_handler Handler = func(s string) int {
 		return len(s)
 	}
-	Handler(len_handler).Add("abc",10);
+	Handler(len_handler).Add("abc", 10)
 
 	// errors.New("")
 
@@ -330,25 +333,21 @@ func main2() {
 	var chan1 chan int
 	fmt.Println("chan1", chan1)
 	chan1 = make(chan int)
-	defer func(param chan int) { close(param)}(chan1)
+	defer func(param chan int) { close(param) }(chan1)
 	fmt.Println("chan1", chan1)
 
 	// 如果通道不带缓冲，则发送发会阻塞，若带缓冲，则发送阻塞知道被拷贝到缓冲区，若缓冲已满，同样阻塞
-	var chan2 = make(chan int,10)
+	var chan2 = make(chan int, 10)
 	chan2 <- 1
 	chan2 <- 2
-	fmt.Println(<-chan2,<-chan2)
+	fmt.Println(<-chan2, <-chan2)
 
-	fmt.Println("math:",-math.Sqrt2)
+	fmt.Println("math:", -math.Sqrt2)
 }
 
-func sayHello(s string){
-	for i:=0;i<5;i++ {
+func sayHello(s string) {
+	for i := 0; i < 5; i++ {
 		time.Sleep(1 * time.Second)
 		fmt.Println(s)
 	}
 }
-
-
-
-
