@@ -1,5 +1,5 @@
 package base
 
-func TestArray()  {
-	
+func TestArray() {
+
 }
