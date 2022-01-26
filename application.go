@@ -29,4 +29,13 @@ func main() {
 
 	fmt.Println("================")
 	base.HandleMyTag()
+
+
+
+	val1 := string(65)
+	fmt.Printf("%v %v\n", val1, reflect.TypeOf(val1))
+	val2 := int32('A')
+	fmt.Printf("%v %v\n", val2, reflect.TypeOf(val2))
+
+	base.StudySync()
 }
