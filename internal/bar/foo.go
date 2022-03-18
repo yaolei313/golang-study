@@ -1,4 +1,4 @@
-package foo
+package bar
 
 func Fibonacci() func() int {
 	count := 0
