@@ -34,6 +34,6 @@ func worker(ch chan Task) {
 	for {
 		//接受任务
 		task := <-ch
-		fmt.Println("handle task %v", task.Name)
+		fmt.Printf("handle task %v", task.Name)
 	}
 }

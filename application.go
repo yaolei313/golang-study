@@ -9,8 +9,7 @@ import (
 )
 
 func main() {
-	iv := []byte{'0', '0', '0', '0', '0', '0', '0', '0'}
-	fmt.Printf("%v", iv)
+
 
 	var b byte = 'a'
 	//Print Size, Type and Character
@@ -68,5 +67,5 @@ func main() {
 
 	base.StudyLog()
 
-	base.TestArray()
+	base.StudyArray()
 }

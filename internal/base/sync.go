@@ -20,7 +20,7 @@ func SayHello(message string, count int) {
 
 func StudySync() {
 	wg.Add(2)
-	go SayHello("hello", 5)
-	go SayHello("hi, li bai.", 5)
+	go SayHello("hi, moon studio", 3)
+	go SayHello("hi, li bai.", 2)
 	wg.Wait()
 }
