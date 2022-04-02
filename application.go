@@ -5,15 +5,10 @@ import (
 	"github.com/yaolei313/golang-study/internal/base"
 	"reflect"
 	"rsc.io/quote"
-	"unsafe"
 )
 
 func main() {
-
-
-	var b byte = 'a'
-	//Print Size, Type and Character
-	fmt.Printf("Size: %d\nType: %s\nCharacter: %c\n", unsafe.Sizeof(b), reflect.TypeOf(b), b)
+	base.TypeStudy()
 
 	func1 := base.Fibonacci()
 	fmt.Println("fibonacci:", func1(), func1(), func1(), func1(), func1(), func1())

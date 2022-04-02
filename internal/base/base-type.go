@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"unsafe"
 )
 
 func TypeStudy() {
+	// 字符0对应ascii码是48
 	iv := []byte{'0', '0', '0', '0', '0', '0', '0', '0'}
-	fmt.Printf("%v", iv)
+	fmt.Printf("%v \n", iv)
 	// 数据类型
 	// uint8 uint16 uint32 uint64
 	// int8 int16 int32 int64
@@ -35,17 +37,27 @@ func TypeStudy() {
 	fmt.Printf("|%5d|%5d|\n", c1, c2)
 	fmt.Printf("|%-5d|%-5d|\n", c1, c2)
 
+	hello := "hello world"
+	// h对应的ascii码是104，类型是uint8
+	fmt.Println(hello[0])
+	fmt.Printf("%T \n", hello[0])
+
+	var b byte = 'a'
+	//Print Size, Type and Character
+	fmt.Printf("Value: %d,Size: %d byte,Type: %s,Character: %c \n", b, unsafe.Sizeof(b), reflect.TypeOf(b), b)
+
+	const constName = "hello"
+	fmt.Println("length is ", len(constName), len(constName[:]))
+
 	// 数组，值类型，长度固定，下标位置不支持负数
 	var array1 [2]int
-	array1[0] = 100
-	array1[1] = 200
+	array1[0], array1[1] = 100, 200
 	var array2 = [5]int{1, 2, 3, 4, 5}
 	var array3 = [...]int{5, 6, 7, 8, 9}
 	fmt.Println(array1, "===", array2, "===", array3)
 
-	for idx, val := range array3 {
-		array3[idx] = val + 10
-		fmt.Println("after:", array3)
+	for idx, _ := range array3 {
+		array3[idx] += 10
 	}
 	fmt.Println("final:", array3)
 
@@ -190,8 +202,6 @@ func TypeStudy() {
 	for idx, val := range array7 {
 		fmt.Println("idx:", idx, "val:", val)
 	}
-
-
 
 	// 变量字符串
 	for key, value := range b2 {
