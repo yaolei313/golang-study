@@ -3,16 +3,20 @@ package main
 import (
 	"fmt"
 	"github.com/yaolei313/golang-study/internal/base"
+	"github.com/yaolei313/golang-study/internal/os_study"
 	"reflect"
 	"rsc.io/quote"
 )
 
 func main() {
+	base.StudyLog()
+	fmt.Println("================")
+
 	base.TypeStudy()
 
 	func1 := base.Fibonacci()
 	fmt.Println("fibonacci:", func1(), func1(), func1(), func1(), func1(), func1())
-	fmt.Println("================")
+
 	fmt.Println(quote.Hello())
 
 	base.TestStruct()
@@ -52,15 +56,15 @@ func main() {
 	}()
 	fmt.Println("================")
 
-	ps0 := &[]string{"Go", "C"}[0]
-	fmt.Println(*ps0) // Go
-
-	ps1 := &[]string{"Go", "C"}[1]
-	fmt.Println(*ps1) // C
-
-	fmt.Println("================")
-
 	base.StudyLog()
 
 	base.StudyArray()
+
+	fmt.Println("================")
+
+	base.StudyChannel()
+
+	fmt.Println("==================")
+
+	os_study.CleanMavenRepository()
 }

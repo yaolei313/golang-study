@@ -2,6 +2,7 @@ package base
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"reflect"
 	"unsafe"
@@ -11,6 +12,7 @@ func TypeStudy() {
 	// 字符0对应ascii码是48
 	iv := []byte{'0', '0', '0', '0', '0', '0', '0', '0'}
 	fmt.Printf("%v \n", iv)
+	log.Printf("%v \n", iv)
 	// 数据类型
 	// uint8 uint16 uint32 uint64
 	// int8 int16 int32 int64
@@ -88,7 +90,12 @@ func TypeStudy() {
 	slice2 = append(slice2, 2, 3, 4)
 
 	var slice3 = make([]int, 5, 10)
-	fmt.Printf("slice3 content:%v\n", slice3)
+	fmt.Printf("slice3 content:%v cap=%d len=%d\n", slice3, cap(slice3), len(slice3))
+
+	var slice4 []int
+	fmt.Printf("slice4 content:%v cap=%d len=%d\n", slice4, cap(slice4), len(slice4))
+	slice4 = append(slice4, 123)
+	fmt.Printf("slice4 content:%v cap=%d len=%d\n", slice4, cap(slice4), len(slice4))
 
 	// 类型转换
 	var float1 = float32(b1)

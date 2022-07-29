@@ -1,8 +1,22 @@
 package base
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"reflect"
+)
 
 func StudyArray() {
+	// 数组的指针
+	ps := &[]string{"Go", "C"}
+	log.Println("type:", (*ps)[0], (*ps)[1], reflect.TypeOf(ps), reflect.TypeOf(*ps))
+
+	ps0 := &[]string{"Go", "C"}[0]
+	fmt.Println(*ps0) // Go
+
+	ps1 := &[]string{"Go", "C"}[1]
+	fmt.Println(*ps1) // C
+
 	studyMap1()
 	studyMap2()
 }
