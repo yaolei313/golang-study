@@ -1,17 +1,24 @@
 package os_study
 
 import (
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io/fs"
 	"io/ioutil"
 	"os"
+	"os/user"
 	"path/filepath"
 )
 
 func CleanMavenRepository() {
 	pwd, _ := os.Getwd()
 	log.Infof("working directory %s", pwd)
-	dirname := "/Users/yaolei/.m2/repository/kuaishou"
+	u, err := user.Current()
+	if err != nil {
+		log.Fatal("current error %t", err)
+	}
+	fmt.Println("user home dir:", u.HomeDir)
+	dirname := u.HomeDir + "/.m2/repository/kuaishou"
 	fileList, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		log.Warnf("read dir fail %s %t", dirname, err)
@@ -28,7 +35,7 @@ func CleanMavenRepository() {
 			doCleanVersionDir(dirname + "/" + tmpFile.Name())
 			count += 1
 		}
-		if count > 1 {
+		if count > 30 {
 			break
 		}
 	}
@@ -36,6 +43,7 @@ func CleanMavenRepository() {
 }
 
 func doCleanVersionDir(dirName string) int {
+	rootDir := dirName
 	var versionList []string
 	filepath.WalkDir(dirName, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -45,12 +53,19 @@ func doCleanVersionDir(dirName string) int {
 		if d == nil {
 			return nil
 		}
+		if path == rootDir {
+			// 继续处理
+			return nil
+		}
 		if !d.IsDir() {
 			return fs.SkipDir
 		}
-		log.Infof("----%s %s", path, d.Name())
+
+		// log.Infof("----%s %s", path, d.Name())
 		versionList = append(versionList, d.Name())
-		return nil
+
+		// 不处理内部目录
+		return fs.SkipDir
 	})
 
 	log.Infof("--%s have %v", dirName, versionList)
