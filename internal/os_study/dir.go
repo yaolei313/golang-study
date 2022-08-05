@@ -4,10 +4,11 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"os/user"
+	"path"
 	"path/filepath"
+	"regexp"
 )
 
 func CleanMavenRepository() {
@@ -18,33 +19,14 @@ func CleanMavenRepository() {
 		log.Fatal("current error %t", err)
 	}
 	fmt.Println("user home dir:", u.HomeDir)
-	dirname := u.HomeDir + "/.m2/repository/kuaishou"
-	fileList, err := ioutil.ReadDir(dirname)
-	if err != nil {
-		log.Warnf("read dir fail %s %t", dirname, err)
-	}
-	log.Infof("dir file count: %d", len(fileList))
-	count := 0
-	for i, _ := range fileList {
-		tmpFile := fileList[i]
-		if tmpFile.Name() == ".DS_Store" {
-			continue
-		}
-		if tmpFile.IsDir() {
-			log.Infof("handle %s", tmpFile.Name())
-			doCleanVersionDir(dirname + "/" + tmpFile.Name())
-			count += 1
-		}
-		if count > 30 {
-			break
-		}
-	}
-
+	// /Users/yaolei/.m2/repository/com/thoughtworks
+	dirname := path.Join(u.HomeDir, "/.m2/repository/com/thoughtworks")
+	// fileList, err := ioutil.ReadDir(dirname)
+	doCleanVersionDir(dirname)
 }
 
 func doCleanVersionDir(dirName string) int {
-	rootDir := dirName
-	var versionList []string
+	versionMap := make(map[string][]string)
 	filepath.WalkDir(dirName, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			log.Errorf("error %+v", err)
@@ -53,22 +35,43 @@ func doCleanVersionDir(dirName string) int {
 		if d == nil {
 			return nil
 		}
-		if path == rootDir {
-			// 继续处理
+		if d.Name() == ".DS_Store" {
 			return nil
 		}
+
 		if !d.IsDir() {
-			return fs.SkipDir
+			return nil
 		}
 
+		parentDir := filepath.Dir(path)
 		// log.Infof("----%s %s", path, d.Name())
-		versionList = append(versionList, d.Name())
-
-		// 不处理内部目录
-		return fs.SkipDir
+		if isVersionDir(d.Name()) {
+			versionSlice := versionMap[parentDir]
+			newVersionSlice := append(versionSlice, d.Name())
+			versionMap[parentDir] = newVersionSlice
+			// 到version这一层就可以了，不处理内部
+			return fs.SkipDir
+		}
+		return nil
 	})
 
-	log.Infof("--%s have %v", dirName, versionList)
+	log.Infof("%s have %v", dirName, versionMap)
+	vlen := len(versionMap)
+	if vlen > 2 {
+		// 保留2个最新的version目录
+		needDeleteList := versionList[:vlen-2]
+		/*for idx, _ := range needDeleteList {
+			deleteDir := path.Join(rootDir, needDeleteList[idx])
+			os.RemoveAll(deleteDir)
+		}*/
+		log.Infof("delete dir %v", needDeleteList)
+	}
 
-	return 0
+	return vlen - 2
+}
+
+var reg1 = regexp.MustCompile(`^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$`)
+
+func isVersionDir(name string) bool {
+	return reg1.MatchString(name)
 }
