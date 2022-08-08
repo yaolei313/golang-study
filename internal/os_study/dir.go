@@ -20,13 +20,15 @@ func CleanMavenRepository() {
 	}
 	fmt.Println("user home dir:", u.HomeDir)
 	// /Users/yaolei/.m2/repository/com/thoughtworks
-	dirname := path.Join(u.HomeDir, "/.m2/repository/com/thoughtworks")
+	dirname := path.Join(u.HomeDir, "/.m2/repository/com/")
 	// fileList, err := ioutil.ReadDir(dirname)
-	doCleanVersionDir(dirname)
+	walkAndCleanDir(dirname)
 }
 
-func doCleanVersionDir(dirName string) int {
-	versionMap := make(map[string][]string)
+func walkAndCleanDir(dirName string) {
+	var versionSlice []string
+	currentParentDir := ""
+	count := 0
 	filepath.WalkDir(dirName, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			log.Errorf("error %+v", err)
@@ -43,31 +45,35 @@ func doCleanVersionDir(dirName string) int {
 			return nil
 		}
 
-		parentDir := filepath.Dir(path)
 		// log.Infof("----%s %s", path, d.Name())
 		if isVersionDir(d.Name()) {
-			versionSlice := versionMap[parentDir]
-			newVersionSlice := append(versionSlice, d.Name())
-			versionMap[parentDir] = newVersionSlice
-			// 到version这一层就可以了，不处理内部
-			return fs.SkipDir
+			parentDir := filepath.Dir(path)
+			if parentDir != currentParentDir {
+				// 清理已扫描除的version目录
+				deleteDuplicatedVersion(currentParentDir, versionSlice)
+				count++
+				versionSlice = nil
+				currentParentDir = parentDir
+			}
+			versionSlice = append(versionSlice, d.Name())
 		}
 		return nil
 	})
+	log.Infof("handle count %v", count)
+}
 
-	log.Infof("%s have %v", dirName, versionMap)
-	vlen := len(versionMap)
+func deleteDuplicatedVersion(dir string, slice []string) {
+	log.Infof("dir %s has %v", dir, slice)
+	vlen := len(slice)
 	if vlen > 2 {
 		// 保留2个最新的version目录
-		needDeleteList := versionList[:vlen-2]
+		needDeleteList := slice[:vlen-2]
 		/*for idx, _ := range needDeleteList {
 			deleteDir := path.Join(rootDir, needDeleteList[idx])
 			os.RemoveAll(deleteDir)
 		}*/
 		log.Infof("delete dir %v", needDeleteList)
 	}
-
-	return vlen - 2
 }
 
 var reg1 = regexp.MustCompile(`^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$`)
