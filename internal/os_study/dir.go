@@ -20,7 +20,7 @@ func CleanMavenRepository() {
 	}
 	fmt.Println("user home dir:", u.HomeDir)
 	// /Users/yaolei/.m2/repository/com/thoughtworks
-	dirname := path.Join(u.HomeDir, "/.m2/repository/com/")
+	dirname := path.Join(u.HomeDir, "/.m2/repository/")
 	// fileList, err := ioutil.ReadDir(dirname)
 	walkAndCleanDir(dirname)
 }
@@ -68,10 +68,10 @@ func deleteDuplicatedVersion(dir string, slice []string) {
 	if vlen > 2 {
 		// 保留2个最新的version目录
 		needDeleteList := slice[:vlen-2]
-		/*for idx, _ := range needDeleteList {
-			deleteDir := path.Join(rootDir, needDeleteList[idx])
+		for idx, _ := range needDeleteList {
+			deleteDir := path.Join(dir, needDeleteList[idx])
 			os.RemoveAll(deleteDir)
-		}*/
+		}
 		log.Infof("delete dir %v", needDeleteList)
 	}
 }
