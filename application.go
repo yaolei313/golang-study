@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/yaolei313/golang-study/internal/base"
-	"github.com/yaolei313/golang-study/internal/os_study"
 	"reflect"
 	"rsc.io/quote"
 )
@@ -66,5 +65,5 @@ func main() {
 
 	fmt.Println("==================")
 
-	os_study.CleanMavenRepository()
+	// os_study.CleanMavenRepository()
 }

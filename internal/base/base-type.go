@@ -37,6 +37,7 @@ func TypeStudy() {
 	d, e = 15, 25
 	fmt.Println(a1, a2, b1, b2, d, e)
 	fmt.Printf("|%5d|%5d|\n", c1, c2)
+	// -左对齐，5代表宽度，d代表数字类型
 	fmt.Printf("|%-5d|%-5d|\n", c1, c2)
 
 	hello := "hello world"

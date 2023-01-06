@@ -14,8 +14,10 @@ type Vertex2 struct {
 func TestStruct() {
 	v := Vertex{10, 11}
 	p := &v
+	pc := v
 	p.X = 1e9
-	fmt.Println(v)
+	// {1000000000 11} {10 11} pc:=v实际为复制struct
+	fmt.Printf("%v %v \n", v, pc)
 
 	v2 := Vertex{X: 100}
 	v3 := Vertex{}
