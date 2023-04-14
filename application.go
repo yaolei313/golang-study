@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/yaolei313/golang-study/internal/base"
 	"reflect"
+
+	"github.com/yaolei313/golang-study/internal/base"
+	"github.com/yaolei313/golang-study/internal/pb"
 	"rsc.io/quote"
 )
 
@@ -66,4 +68,5 @@ func main() {
 	fmt.Println("==================")
 
 	// os_study.CleanMavenRepository()
+	pb.TestPb()
 }

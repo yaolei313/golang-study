@@ -59,10 +59,13 @@ func TypeStudy() {
 	var array3 = [...]int{5, 6, 7, 8, 9}
 	fmt.Println(array1, "===", array2, "===", array3)
 
-	for idx, _ := range array3 {
-		array3[idx] += 10
+	count := 0
+	defer func() {
+		fmt.Printf("count:%d \n", count)
+	}()
+	for range array3 {
+		count++
 	}
-	fmt.Println("final:", array3)
 
 	// 不设置值的话，默认值为0
 	var array4 [2][3]int
@@ -85,10 +88,11 @@ func TypeStudy() {
 	slice1[0] = 998
 	fmt.Println("slice is a reference", array7, slice1)
 
-	var slice2 []int = make([]int, 10)
+	var slice2 []int = make([]int, 5, 10)
 	fmt.Printf("slice2 content:%v cap=%d len=%d\n", slice2, cap(slice2), len(slice2))
 	slice2 = append(slice2, 1)
 	slice2 = append(slice2, 2, 3, 4)
+	fmt.Printf("slice2 content:%v cap=%d len=%d\n", slice2, cap(slice2), len(slice2))
 
 	var slice3 = make([]int, 5, 10)
 	fmt.Printf("slice3 content:%v cap=%d len=%d\n", slice3, cap(slice3), len(slice3))

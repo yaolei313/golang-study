@@ -1,9 +1,12 @@
 package base
 
 import (
-	"github.com/sirupsen/logrus"
 	"log"
+	"net/http"
 	"os"
+
+	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 func StudyLog() {
@@ -35,4 +38,34 @@ func StudyLog() {
 	}
 	logrus.WithFields(standardFields).WithFields(logrus.Fields{"xxx": 1}).Info("My first log from Golang")
 
+	logger, err := zap.NewProduction()
+	if err != nil {
+		log.Fatalf("can't initialize zap logger: %v", err)
+	}
+	defer logger.Sync()
+
+	atomicLevel := zap.NewAtomicLevelAt(zap.InfoLevel)
+	config := zap.Config{
+		Level:       atomicLevel,
+		Development: false,
+		Sampling: &zap.SamplingConfig{
+			Initial:    100,
+			Thereafter: 100,
+		},
+		Encoding:         "json",
+		EncoderConfig:    zap.NewProductionEncoderConfig(),
+		OutputPaths:      []string{"stderr"},
+		ErrorOutputPaths: []string{"stderr"},
+	}
+	logger2, err := config.Build()
+	if err != nil {
+		log.Fatalf("can't initialize zap logger2: %v", err)
+	}
+	defer logger2.Sync()
+
+	http.HandleFunc("log/level", atomicLevel.ServeHTTP)
+	err = http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatalf("listen and serve error: %v", err)
+	}
 }
